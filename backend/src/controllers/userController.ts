@@ -16,7 +16,10 @@ export async function createUser(request: FastifyRequest, reply: FastifyReply) {
         // Chama o serviço para criar o usuário
         const newUser = await createUserService({ name, email, password });
         // Retorna o novo usuário com código de status 201 (Criado)
-        reply.code(201).send(newUser);
+        reply.code(201).send({
+            message: 'Usuário criado com sucesso!',
+            user: newUser
+        });
     } catch (error: any) {
         // Captura de erros durante a criação do usuário
         reply.code(500).send({ message: 'Erro ao criar o usuário', error: error.message });
@@ -68,7 +71,10 @@ export async function updateUser(request: FastifyRequest, reply: FastifyReply) {
         const updatedUser = await updateUserService(id, { name, email, password });
         if (updatedUser) {
             // Retorna o usuário atualizado se encontrado
-            reply.send(updatedUser);
+            reply.send({
+                message: 'Usuário atualizado com sucesso!',
+                user: updatedUser
+            });
         } else {
             // Retorna um erro 404 se o usuário não for encontrado para atualização
             reply.code(404).send({ message: 'Usuário não encontrado para atualização' });
@@ -87,7 +93,7 @@ export async function deleteUser(request: FastifyRequest, reply: FastifyReply) {
         // Chama o serviço para excluir o usuário
         await deleteUserService(id);
         // Retorna um código de sucesso 204 (Sem conteúdo) após a exclusão
-        reply.code(204).send();
+        reply.code(200).send({message: 'Usuario deletado com sucesso!'});
     } catch (error: any) {
         // Captura de erros durante a exclusão do usuário
         reply.code(500).send({ message: 'Erro ao excluir o usuário', error: error.message });

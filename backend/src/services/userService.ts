@@ -21,9 +21,9 @@ export async function getUserByIdService(id: string) {
 }
 
 export async function updateUserService(id: string, data: {
-    name: string, 
-    email: string, 
-    password: string
+    name?: string, 
+    email?: string, 
+    password?: string
 }){
     return prisma.user.update({
         where: { id },
