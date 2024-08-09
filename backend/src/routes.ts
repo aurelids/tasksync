@@ -1,25 +1,11 @@
-import { FastifyInstance, FastifyPluginOptions } from 'fastify';
-import {
-  createUser,
-  getAllUsers,
-  getUserById,
-  updateUser,
-  deleteUser
-} from './controllers/userController';
+import { FastifyInstance } from 'fastify';
+import { loginUser, createUser, getAllUsers, getUserById, updateUser, deleteUser } from './controllers/userController';
 
-export async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
-  // Rota para criar um novo usuário
-  fastify.post('/users', createUser);
-
-  // Rota para obter todos os usuários
-  fastify.get('/users', getAllUsers);
-
-  // Rota para obter um usuário específico por ID
-  fastify.get('/users/:id', getUserById);
-
-  // Rota para atualizar um usuário existente
-  fastify.put('/users/:id', updateUser);
-
-  // Rota para excluir um usuário
-  fastify.delete('/users/:id', deleteUser);
+export async function routes(app: FastifyInstance) {
+  app.post('/login', loginUser);
+  app.post('/users', createUser);
+  app.get('/users', getAllUsers);
+  app.get('/users/:id', getUserById);
+  app.put('/users/:id', updateUser);
+  app.delete('/users/:id', deleteUser);
 }
