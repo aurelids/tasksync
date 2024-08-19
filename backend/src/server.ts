@@ -12,7 +12,6 @@ app.register(cors, {
   allowedHeaders: ['Content-Type', 'Authorization'],
 });
 
-console.log('JWT_SECRET:', process.env.JWT_SECRET);
 
 // Registrar as rotas
 app.register(routes);

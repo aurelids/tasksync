@@ -1,40 +1,48 @@
 datasource db {
-  provider = "mongodb"          // Define que o banco de dados utilizado é MongoDB
-  url      = env("DATABASE_URL") // URL de conexão para o banco de dados, obtida de uma variável de ambiente
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
-  provider = "prisma-client-js"  // Define o gerador do cliente Prisma para JavaScript/TypeScript
+  provider = "prisma-client-js"
 }
 
 model User {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId  // Identificador único do usuário, mapeado para _id no MongoDB
-  name        String       // Nome do usuário
-  email       String       @unique  // E-mail do usuário, deve ser único
-  password    String       // Senha do usuário
-  memberships Membership[] // Relacionamento de muitos-para-muitos com o modelo Group através da tabela Membership
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String       @unique
+  password    String
+  memberships Membership[]
 }
 
 model Group {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId  // Identificador único do grupo, mapeado para _id no MongoDB
-  name        String       // Nome do grupo
-  memberships Membership[] // Relacionamento de muitos-para-muitos com o modelo User através da tabela Membership
-  tasks       Task[]       // Relacionamento de um-para-muitos com o modelo Task
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  memberships Membership[]
+  tasks       Task[]
 }
 
 model Membership {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId  // Identificador único da tabela de junção, mapeado para _id no MongoDB
-  userId      String   @db.ObjectId  // Referência ao ID do usuário, deve ser do tipo ObjectId
-  groupId     String   @db.ObjectId  // Referência ao ID do grupo, deve ser do tipo ObjectId
-  user        User     @relation(fields: [userId], references: [id]) // Relacionamento com o modelo User
-  group       Group    @relation(fields: [groupId], references: [id]) // Relacionamento com o modelo Group
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  groupId     String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
+  group       Group    @relation(fields: [groupId], references: [id])
 }
 
 model Task {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId  // Identificador único da tarefa, mapeado para _id no MongoDB
-  title     String   // Título da tarefa
-  status    String   // Status da tarefa (por exemplo, "pendente", "em andamento", "concluída")
-  dueDate   DateTime // Data e hora de vencimento da tarefa
-  groupId   String   @db.ObjectId // Referência ao ID do grupo ao qual a tarefa pertence
-  group     Group    @relation(fields: [groupId], references: [id]) // Relacionamento com o modelo Group
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  status    String
+  dueDate   DateTime
+  groupId   String   @db.ObjectId
+  group     Group    @relation(fields: [groupId], references: [id])
+}
+
+model Project {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  startDate   DateTime
+  deadline    DateTime
 }
