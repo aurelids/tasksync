@@ -35,3 +35,14 @@ export async function getAllProjects() {
     throw new Error(`Erro ao buscar projetos: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
+
+export async function deleteProject(id: string) {
+  try {
+    await prisma.project.delete({
+      where: { id }
+    });
+  } catch (error) {
+    console.error('Erro ao deletar projeto:', error);
+    throw new Error(`Erro ao deletar projeto: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}

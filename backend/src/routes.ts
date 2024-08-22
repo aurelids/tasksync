@@ -7,7 +7,11 @@ import {
     updateUser,
     deleteUser
 } from './controllers/userController';
-import { handleCreateProject, handleGetProjects } from './controllers/projectController';
+import {
+    handleCreateProject,
+    handleGetProjects,
+    handleDeleteProject
+} from './controllers/projectController';
 
 export async function routes(app: FastifyInstance) {
     // Rotas de usuário
@@ -21,4 +25,5 @@ export async function routes(app: FastifyInstance) {
     // Rotas de projeto
     app.post('/projects', handleCreateProject);
     app.get('/projects', handleGetProjects);
+    app.delete('/projects/:id', handleDeleteProject);  // Adiciona a rota para deletar projeto
 }

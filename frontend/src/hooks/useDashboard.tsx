@@ -1,6 +1,6 @@
 // src/hooks/useDashboard.ts
 import { useState, useEffect } from 'react';
-import { fetchProjects, createProject } from '../api';
+import { fetchProjects, createProject, deleteProject } from '../api'; // Importar a função deleteProject
 
 export const useDashboard = () => {
     const [projects, setProjects] = useState<any[]>([]);
@@ -39,6 +39,17 @@ export const useDashboard = () => {
         setSelectedProject(project);
     };
 
+    // Nova função para lidar com a exclusão de projetos
+    const handleDeleteProject = async (projectId: string) => {
+        try {
+            await deleteProject(projectId);
+            setProjects(projects.filter(project => project.id !== projectId));
+            setSelectedProject(null); // Desseleciona o projeto após excluí-lo
+        } catch (error) {
+            // Handle error if needed
+        }
+    };
+
     return {
         projects,
         newProject,
@@ -47,6 +58,7 @@ export const useDashboard = () => {
         handleProjectChange,
         handleSubmit,
         handleProjectClick,
+        handleDeleteProject, // Adiciona a função de deletar
         setShowForm
     };
 };

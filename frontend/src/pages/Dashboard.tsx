@@ -1,4 +1,3 @@
-// src/pages/Dashboard.tsx
 import Header from '../components/Header';
 import LSideMenu from '../components/LSideMenu';
 import AddProject from '../components/AddProject';
@@ -15,6 +14,7 @@ const Dashboard = () => {
         handleProjectChange,
         handleSubmit,
         handleProjectClick,
+        handleDeleteProject, // Adiciona a função de deletar
         setShowForm
     } = useDashboard();
 
@@ -31,7 +31,10 @@ const Dashboard = () => {
 
                 <div className="w-4/5 p-4">
                     {selectedProject ? (
-                        <Kanban project={selectedProject} />
+                        <Kanban 
+                            project={selectedProject}
+                            onDeleteProject={handleDeleteProject} // Passa a função para Kanban
+                        />
                     ) : (
                         <div>
                             <p>Selecione um projeto para visualizar o conteúdo.</p>

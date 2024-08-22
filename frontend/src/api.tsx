@@ -24,3 +24,13 @@ export const createProject = async (project: { name: string; description: string
         throw error;
     }
 };
+
+export const deleteProject = async (projectId: string) => {
+    const response = await fetch(`/api/projects/${projectId}`, {
+        method: 'DELETE',
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to delete project');
+    }
+};
