@@ -1,48 +1,83 @@
+// Definição da fonte de dados, neste caso, o banco de dados que o Prisma vai utilizar.
 datasource db {
+  // O provedor do banco de dados que está sendo usado, neste caso, o MongoDB.
   provider = "mongodb"
+  // A URL de conexão com o banco de dados é obtida a partir de uma variável de ambiente.
   url      = env("DATABASE_URL")
 }
 
+// Configuração do gerador de cliente Prisma, que cria automaticamente o Prisma Client para interagir com o banco de dados.
 generator client {
+  // O provedor utilizado para gerar o cliente é o 'prisma-client-js'.
   provider = "prisma-client-js"
 }
 
+// Modelo de dados para a entidade User.
 model User {
+  // Campo 'id' do tipo String que serve como identificador único, com valor gerado automaticamente e mapeado para o campo '_id' no MongoDB.
   id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  // Campo 'name' para armazenar o nome do usuário.
   name        String
+  // Campo 'email' para armazenar o email do usuário, sendo um valor único.
   email       String       @unique
+  // Campo 'password' para armazenar a senha do usuário.
   password    String
+  // Relação com o modelo Membership. Um usuário pode ter várias associações.
   memberships Membership[]
 }
 
+// Modelo de dados para a entidade Group.
 model Group {
+  // Campo 'id' do tipo String que serve como identificador único, com valor gerado automaticamente e mapeado para o campo '_id' no MongoDB.
   id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  // Campo 'name' para armazenar o nome do grupo.
   name        String
+  // Relação com o modelo Membership. Um grupo pode ter várias associações.
   memberships Membership[]
+  // Relação com o modelo Task. Um grupo pode ter várias tarefas.
   tasks       Task[]
 }
 
+// Modelo de dados para representar a associação entre um usuário e um grupo.
 model Membership {
+  // Campo 'id' do tipo String que serve como identificador único, com valor gerado automaticamente e mapeado para o campo '_id' no MongoDB.
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  // Campo 'userId' para armazenar o identificador do usuário, que é uma referência ao modelo User.
   userId      String   @db.ObjectId
+  // Campo 'groupId' para armazenar o identificador do grupo, que é uma referência ao modelo Group.
   groupId     String   @db.ObjectId
+  // Definição da relação com o modelo User. Liga o campo 'userId' ao campo 'id' do modelo User.
   user        User     @relation(fields: [userId], references: [id])
+  // Definição da relação com o modelo Group. Liga o campo 'groupId' ao campo 'id' do modelo Group.
   group       Group    @relation(fields: [groupId], references: [id])
 }
 
+// Modelo de dados para a entidade Task.
 model Task {
+  // Campo 'id' do tipo String que serve como identificador único, com valor gerado automaticamente e mapeado para o campo '_id' no MongoDB.
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  // Campo 'title' para armazenar o título da tarefa.
   title     String
+  // Campo 'status' para armazenar o status da tarefa.
   status    String
+  // Campo 'dueDate' para armazenar a data de conclusão da tarefa.
   dueDate   DateTime
+  // Campo 'groupId' para armazenar o identificador do grupo ao qual a tarefa pertence.
   groupId   String   @db.ObjectId
+  // Definição da relação com o modelo Group. Liga o campo 'groupId' ao campo 'id' do modelo Group.
   group     Group    @relation(fields: [groupId], references: [id])
 }
 
+// Modelo de dados para a entidade Project.
 model Project {
+  // Campo 'id' do tipo String que serve como identificador único, com valor gerado automaticamente e mapeado para o campo '_id' no MongoDB.
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  // Campo 'name' para armazenar o nome do projeto.
   name        String
+  // Campo 'description' para armazenar a descrição do projeto.
   description String
+  // Campo 'startDate' para armazenar a data de início do projeto.
   startDate   DateTime
+  // Campo 'deadline' para armazenar a data limite do projeto.
   deadline    DateTime
 }

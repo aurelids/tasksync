@@ -1,9 +1,9 @@
+import React, { useState } from 'react';
 import { Button, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import axios from 'axios'; // Certifique-se de instalar axios com `npm install axios`
 
-export const Login = () => {
+const Login: React.FC = () => {
     const navigate = useNavigate();
     
     // States para armazenar os valores dos campos e possíveis mensagens de erro
@@ -33,8 +33,8 @@ export const Login = () => {
     
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="p-8 bg-white shadow-lg rounded-lg">
-                <h2 className="text-2xl font-bold mb-4 text-center">LOGIN</h2>
+            <div className="p-8 bg-white shadow-lg rounded-lg max-w-sm w-full">
+                <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <TextField
@@ -75,3 +75,5 @@ export const Login = () => {
         </div>
     );
 };
+
+export default Login;
