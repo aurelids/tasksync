@@ -14,7 +14,7 @@ const Dashboard = () => {
         handleProjectChange,
         handleSubmit,
         handleProjectClick,
-        handleDeleteProject, // Adiciona a função de deletar
+        handleDeleteProject,
         setShowForm
     } = useDashboard();
 
@@ -33,7 +33,7 @@ const Dashboard = () => {
                     {selectedProject ? (
                         <Kanban 
                             project={selectedProject}
-                            onDeleteProject={handleDeleteProject} // Passa a função para Kanban
+                            onDeleteProject={handleDeleteProject}
                         />
                     ) : (
                         <div>

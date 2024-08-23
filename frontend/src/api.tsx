@@ -1,6 +1,6 @@
 // src/api.ts
 import axios from 'axios';
-import { API_BASE_URL } from './api/config';
+import { API_BASE_URL } from './api/config'; // Certifique-se de que o caminho está correto
 
 export const fetchProjects = async () => {
     try {
@@ -14,10 +14,7 @@ export const fetchProjects = async () => {
 
 export const createProject = async (project: { name: string; description: string; startDate: string; deadline: string }) => {
     try {
-        const response = await axios.post(`${API_BASE_URL}/projects`, {
-            ...project,
-            userId: 'id-do-usuario' // Substitua 'id-do-usuario' pelo ID real do usuário que deve ser associado ao projeto
-        });
+        const response = await axios.post(`${API_BASE_URL}/projects`, project);
         return response.data;
     } catch (error) {
         console.error('Erro ao criar projeto:', error);
@@ -26,11 +23,30 @@ export const createProject = async (project: { name: string; description: string
 };
 
 export const deleteProject = async (projectId: string) => {
-    const response = await fetch(`/api/projects/${projectId}`, {
-        method: 'DELETE',
-    });
+    try {
+        await axios.delete(`${API_BASE_URL}/projects/${projectId}`);
+    } catch (error) {
+        console.error('Erro ao excluir projeto:', error);
+        throw error;
+    }
+};
 
-    if (!response.ok) {
-        throw new Error('Failed to delete project');
+export const fetchTasks = async (projectId: string) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/tasks/${projectId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao buscar tarefas:', error);
+        throw error;
+    }
+};
+
+export const createTask = async (task: { projectId: string; title: string; status: string }) => {
+    try {
+        const response = await axios.post(`${API_BASE_URL}/tasks`, task);
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao criar tarefa:', error);
+        throw error;
     }
 };

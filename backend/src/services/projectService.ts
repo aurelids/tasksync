@@ -46,3 +46,4 @@ export async function deleteProject(id: string) {
     throw new Error(`Erro ao deletar projeto: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
+

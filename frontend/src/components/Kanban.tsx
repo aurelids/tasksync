@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Button, Paper } from '@mui/material';
 import EditTask from './EditTask';
+import axios from 'axios'; // Importar axios
+import { API_BASE_URL } from '../api/config'; // Importar API_BASE_URL
+import { fetchTasks, createTask } from '../api'; // Importar a função de buscar e criar tarefas
 
 interface KanbanProps {
     project: {
@@ -14,10 +17,10 @@ interface KanbanProps {
 }
 
 interface Task {
-    id: number;
+    id: string; // Alterado para string para coincidir com o ID do MongoDB
     title: string;
     description: string;
-    column: string;
+    status: string; // Corrigido para 'status'
     projectId: string;
 }
 
@@ -28,20 +31,32 @@ const Kanban = ({ project, onDeleteProject }: KanbanProps) => {
     const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
 
     useEffect(() => {
-        setTasks([]);
-        setTaskIdCounter(0);
+        const loadTasks = async () => {
+            try {
+                const tasksData = await fetchTasks(project.id);
+                setTasks(tasksData);
+            } catch (error) {
+                console.error('Erro ao buscar tarefas:', error);
+            }
+        };
+        loadTasks();
     }, [project.id]);
 
-    const handleAddTask = (column: string) => {
-        const newTask: Task = {
-            id: taskIdCounter,
+    const handleAddTask = async (status: string) => {
+        const newTask = {
             title: `Tarefa ${taskIdCounter + 1}`,
-            description: '',
-            column,
+            description: '', // Opcional, se não for necessário, pode remover
+            status, // Corrigido para 'status'
             projectId: project.id,
         };
-        setTasks([...tasks, newTask]);
-        setTaskIdCounter(taskIdCounter + 1);
+
+        try {
+            const response = await createTask(newTask);
+            setTasks([...tasks, response]); // Atualiza o estado com a nova tarefa
+            setTaskIdCounter(taskIdCounter + 1);
+        } catch (error) {
+            console.error('Erro ao adicionar tarefa:', error);
+        }
     };
 
     const handleEditTask = (task: Task) => {
@@ -49,25 +64,39 @@ const Kanban = ({ project, onDeleteProject }: KanbanProps) => {
         setEditTaskOpen(true);
     };
 
-    const handleSaveTask = (title: string, description: string) => {
-        if (taskToEdit) {
-            setTasks(tasks.map(task => 
-                task.id === taskToEdit.id 
-                ? { ...task, title, description } 
-                : task
-            ));
-            setTaskToEdit(null);
+    const handleSaveTask = async (taskId: string, title: string, description: string) => {
+        if (taskId) {
+            try {
+                await axios.put(`${API_BASE_URL}/tasks/${taskId}`, {
+                    title,
+                    description,
+                });
+                setTasks(tasks.map(task =>
+                    task.id === taskId
+                        ? { ...task, title, description }
+                        : task
+                ));
+                setTaskToEdit(null);
+            } catch (error) {
+                console.error('Erro ao salvar tarefa:', error);
+            }
         }
     };
 
-    const handleDeleteTask = () => {
-        if (taskToEdit) {
-            setTasks(tasks.filter(task => task.id !== taskToEdit.id));
-            setTaskToEdit(null);
+    const handleDeleteTask = async (taskId: string) => {
+        if (taskId) {
+            try {
+                await axios.delete(`${API_BASE_URL}/tasks/${taskId}`);
+                setTasks(tasks.filter(task => task.id !== taskId));
+                setTaskToEdit(null);
+            } catch (error) {
+                console.error('Erro ao excluir tarefa:', error);
+            }
         }
     };
 
     const handleDeleteProject = () => {
+        console.log(`Tentando excluir o projeto com ID: ${project.id}`);
         onDeleteProject(project.id);
     };
 
@@ -91,7 +120,7 @@ const Kanban = ({ project, onDeleteProject }: KanbanProps) => {
                     <div key={column} className="flex-1 bg-white p-4 shadow-md rounded">
                         <h2 className="text-xl font-bold mb-2">{column}</h2>
                         <div className="space-y-2">
-                            {tasks.filter(task => task.column === column && task.projectId === project.id).map(task => (
+                            {tasks.filter(task => task.status === column && task.projectId === project.id).map(task => (
                                 <Paper key={task.id} elevation={3} className="p-4">
                                     <h3 className="font-semibold">{task.title}</h3>
                                     <Button
@@ -101,7 +130,7 @@ const Kanban = ({ project, onDeleteProject }: KanbanProps) => {
                                         style={{ marginTop: '8px' }}
                                         onClick={() => handleEditTask(task)}
                                     >
-                                        Visualizar tarefa
+                                        VER
                                     </Button>
                                 </Paper>
                             ))}
@@ -123,6 +152,7 @@ const Kanban = ({ project, onDeleteProject }: KanbanProps) => {
                 <EditTask
                     open={editTaskOpen}
                     handleClose={() => setEditTaskOpen(false)}
+                    taskId={taskToEdit.id} // Adicionando taskId
                     taskTitle={taskToEdit.title}
                     taskDescription={taskToEdit.description}
                     handleSave={handleSaveTask}

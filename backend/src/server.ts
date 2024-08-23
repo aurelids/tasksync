@@ -1,8 +1,8 @@
+// src/server.ts
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import { routes } from './routes';
 import 'dotenv/config';
-import { prisma } from './prisma';
 
 const app = Fastify({ logger: true });
 
@@ -11,7 +11,6 @@ app.register(cors, {
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 });
-
 
 // Registrar as rotas
 app.register(routes);

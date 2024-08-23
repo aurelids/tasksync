@@ -1,26 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 interface EditTaskProps {
     open: boolean;
     handleClose: () => void;
+    taskId: string; // Adicionando taskId
     taskTitle: string;
     taskDescription: string;
-    handleSave: (title: string, description: string) => void;
-    handleDelete: () => void;
+    handleSave: (taskId: string, title: string, description: string) => Promise<void>; // Adicionando taskId ao handleSave
+    handleDelete: (taskId: string) => Promise<void>; // Adicionando taskId ao handleDelete
 }
 
-const EditTask = ({ open, handleClose, taskTitle, taskDescription, handleSave, handleDelete }: EditTaskProps) => {
+const EditTask = ({ open, handleClose, taskId, taskTitle, taskDescription, handleSave, handleDelete }: EditTaskProps) => {
     const [title, setTitle] = useState(taskTitle);
     const [description, setDescription] = useState(taskDescription);
 
+    // UseEffect para sincronizar os estados de título e descrição com as props recebidas
+    useEffect(() => {
+        setTitle(taskTitle);
+        setDescription(taskDescription);
+    }, [taskTitle, taskDescription]);
+
     const handleSaveClick = () => {
-        handleSave(title, description);
+        handleSave(taskId, title, description); // Passando taskId
         handleClose();
     };
 
     const handleDeleteClick = () => {
-        handleDelete();
+        handleDelete(taskId); // Passando taskId
         handleClose();
     };
 
