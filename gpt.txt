@@ -1,8 +1,0 @@
-inicio do projeto
-https://chatgpt.com/c/95331d89-151e-4489-b092-6fe3a62fc69f
-
-duvidas api
-https://chatgpt.com/c/fefa86f6-7c6e-437b-ae90-57e4c33a9c95
-
-inicio front-end e autenticação jws
-https://chatgpt.com/c/95331d89-151e-4489-b092-6fe3a62fc69f
