@@ -1,4 +1,4 @@
-// src/server.ts
+
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import { routes } from './routes';
@@ -12,7 +12,7 @@ app.register(cors, {
   allowedHeaders: ['Content-Type', 'Authorization'],
 });
 
-// Registrar as rotas
+
 app.register(routes);
 
 app.setErrorHandler((error, request, reply) => {

@@ -5,8 +5,8 @@ const prisma = new PrismaClient();
 interface CreateProjectInput {
   name: string;
   description: string;
-  startDate: string; // ISO string
-  deadline: string; // ISO string
+  startDate: string; 
+  deadline: string; 
 }
 
 export async function createProject(data: CreateProjectInput) {
@@ -15,8 +15,8 @@ export async function createProject(data: CreateProjectInput) {
       data: {
         name: data.name,
         description: data.description,
-        startDate: new Date(data.startDate), // Converte para Date
-        deadline: new Date(data.deadline), // Converte para Date
+        startDate: new Date(data.startDate), 
+        deadline: new Date(data.deadline), 
       },
     });
     return project;

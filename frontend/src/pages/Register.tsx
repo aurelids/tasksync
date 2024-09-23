@@ -26,7 +26,7 @@ const Register: React.FC = () => {
         password,
       });
 
-      // Redirecionar para a página de login após o registro bem-sucedido
+      
       navigate('/');
     } catch (err) {
       setError('Erro ao cadastrar usuário. Verifique os dados e tente novamente.');

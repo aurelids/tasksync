@@ -8,7 +8,7 @@ export async function createTask(data: { projectId: string; title: string; statu
             projectId: data.projectId,
             title: data.title,
             status: data.status,
-            description: data.description, // Salvando a descrição
+            description: data.description, 
         },
     });
 }
@@ -33,7 +33,7 @@ export async function updateTask(id: string, data: { title?: string; status?: st
         data: {
             title: data.title,
             status: data.status,
-            description: data.description, // Atualizando a descrição
+            description: data.description, 
         },
     });
 }

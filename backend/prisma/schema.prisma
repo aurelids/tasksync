@@ -1,61 +1,61 @@
-// Definição da fonte de dados, neste caso, o banco de dados que o Prisma vai utilizar.
+
 datasource db {
-  // O provedor do banco de dados que está sendo usado, neste caso, o MongoDB.
+
   provider = "mongodb"
-  // A URL de conexão com o banco de dados é obtida a partir de uma variável de ambiente.
+ 
   url      = env("DATABASE_URL")
 }
 
-// Configuração do gerador de cliente Prisma, que cria automaticamente o Prisma Client para interagir com o banco de dados.
+
 generator client {
-  // O provedor utilizado para gerar o cliente é o 'prisma-client-js'.
+ 
   provider = "prisma-client-js"
 }
 
-// Modelo de dados para a entidade User.
+
 model User {
-  // Campo 'id' do tipo String que serve como identificador único, com valor gerado automaticamente e mapeado para o campo '_id' no MongoDB.
+
   id          String       @id @default(auto()) @map("_id") @db.ObjectId
-  // Campo 'name' para armazenar o nome do usuário.
+
   name        String
-  // Campo 'email' para armazenar o email do usuário, sendo um valor único.
+
   email       String       @unique
-  // Campo 'password' para armazenar a senha do usuário.
+ 
   password    String
-  // Relação com o modelo Membership. Um usuário pode ter várias associações.
+
   memberships Membership[]
 }
 
-// Modelo de dados para representar a associação entre um usuário e um grupo.
+
 model Membership {
-  // Campo 'id' do tipo String que serve como identificador único, com valor gerado automaticamente e mapeado para o campo '_id' no MongoDB.
+
   id      String @id @default(auto()) @map("_id") @db.ObjectId
-  // Campo 'userId' para armazenar o identificador do usuário, que é uma referência ao modelo User.
+
   userId  String @db.ObjectId
 
-  // Definição da relação com o modelo User. Liga o campo 'userId' ao campo 'id' do modelo User.
+
   user    User   @relation(fields: [userId], references: [id])
 
 }
 
-// Modelo de dados para a entidade Task.
+
 model Task {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   status      String
-  description String?  // Campo de descrição adicionado como opcional
+  description String? 
   projectId   String   @map("project_id") @db.ObjectId
-  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade) // Relação com Project
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade) 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
-// Modelo de dados para a entidade Project.
+
 model Project {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
   startDate   DateTime
   deadline    DateTime
-  tasks       Task[]   // Relação com as tarefas
+  tasks       Task[]   
 }

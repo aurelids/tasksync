@@ -42,7 +42,7 @@ export async function handleDeleteTask(request: FastifyRequest, reply: FastifyRe
   try {
     const { id } = request.params as { id: string };
     await deleteTask(id);
-    reply.status(204).send(); // Retorna status 204 No Content
+    reply.status(204).send(); 
   } catch (error) {
     if (error instanceof Error) {
       console.error('Erro no controlador ao excluir tarefa:', error.message);

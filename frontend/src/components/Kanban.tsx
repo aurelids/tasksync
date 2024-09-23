@@ -45,14 +45,14 @@ const Kanban = ({ project, onDeleteProject }: KanbanProps) => {
     const handleAddTask = async (status: string) => {
         const newTask = {
             title: `Tarefa ${taskIdCounter + 1}`,
-            description: '', // Opcional, se não for necessário, pode remover
-            status, // Corrigido para 'status'
+            description: '', 
+            status,
             projectId: project.id,
         };
 
         try {
             const response = await createTask(newTask);
-            setTasks([...tasks, response]); // Atualiza o estado com a nova tarefa
+            setTasks([...tasks, response]); 
             setTaskIdCounter(taskIdCounter + 1);
         } catch (error) {
             console.error('Erro ao adicionar tarefa:', error);

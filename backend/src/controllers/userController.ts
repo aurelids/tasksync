@@ -6,9 +6,9 @@ import {
   updateUserService,
   deleteUserService 
 } from '../services/userService';
-import { prisma } from '../prisma';  // Certifique-se de que esta importação está correta
+import { prisma } from '../prisma';  
 
-// Função para criar um novo usuário
+
 export async function createUser(request: FastifyRequest, reply: FastifyReply) {
     try {
         const { name, email, password } = request.body as { name: string, email: string, password: string };
@@ -28,7 +28,7 @@ export async function createUser(request: FastifyRequest, reply: FastifyReply) {
     }
 }
 
-// Função para autenticar o usuário (login) com verificação básica
+
 export async function loginUser(request: FastifyRequest, reply: FastifyReply) {
     try {
         const { email, password } = request.body as { email: string, password: string };
@@ -39,7 +39,7 @@ export async function loginUser(request: FastifyRequest, reply: FastifyReply) {
             return reply.code(401).send({ message: 'Credenciais inválidas' });
         }
 
-        // Verificação básica: comparação da senha fornecida com a senha armazenada
+ 
         if (password === user.password) {
             return reply.send({ message: 'Login bem-sucedido!' });
         } else {
@@ -52,7 +52,7 @@ export async function loginUser(request: FastifyRequest, reply: FastifyReply) {
     }
 }
 
-// Função para obter todos os usuários
+
 export async function getAllUsers(request: FastifyRequest, reply: FastifyReply) {
     try {
         const users = await getAllUsersService();
@@ -62,7 +62,6 @@ export async function getAllUsers(request: FastifyRequest, reply: FastifyReply) 
     }
 }
 
-// Função para obter um usuário por ID
 export async function getUserById(request: FastifyRequest, reply: FastifyReply) {
     try {
         const { id } = request.params as { id: string };
@@ -85,7 +84,7 @@ export async function updateUser(request: FastifyRequest, reply: FastifyReply) {
         
         const updatedData: any = { name, email };
         if (password) {
-            updatedData.password = password;  // Não criptografar a senha por enquanto
+            updatedData.password = password; 
         }
 
         const updatedUser = await updateUserService(id, updatedData);
@@ -102,7 +101,7 @@ export async function updateUser(request: FastifyRequest, reply: FastifyReply) {
     }
 }
 
-// Função para excluir um usuário
+
 export async function deleteUser(request: FastifyRequest, reply: FastifyReply) {
     try {
         const { id } = request.params as { id: string };

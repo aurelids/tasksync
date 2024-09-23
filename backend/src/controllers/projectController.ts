@@ -3,7 +3,7 @@ import { createProject, getAllProjects, deleteProject } from '../services/projec
 
 export async function handleCreateProject(request: FastifyRequest, reply: FastifyReply) {
   try {
-    // Atualize a extração de dados do corpo da requisição
+
     const projectData = request.body as {
       name: string;
       description: string;
