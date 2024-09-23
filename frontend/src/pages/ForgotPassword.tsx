@@ -1,7 +1,7 @@
 import { Button, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-export const ForgotPassword = () => {
+const ForgotPassword = () => {
   const navigate = useNavigate();
 
   return (
@@ -26,3 +26,5 @@ export const ForgotPassword = () => {
     </div>
   );
 };
+
+export default ForgotPassword;
